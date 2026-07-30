@@ -20,20 +20,20 @@ jobs:
           cache: maven
       - name: Restore source bundle
         run: |
-          base64 -d NovaEconomy-source.tar.gz.b64 > NovaEconomy-source.tar.gz
+          cat source.part00 source.part01 source.part02 source.part03 | base64 -d > NovaEconomy-source.tar.gz
           mkdir project
           tar -xzf NovaEconomy-source.tar.gz -C project
       - name: Build and test
-        working-directory: project/NovaEconomy-final
+        working-directory: project/NovaEconomy
         run: mvn --batch-mode clean package
       - name: Upload plugin JAR
         uses: actions/upload-artifact@v4
         with:
           name: NovaEconomy-jar
-          path: project/NovaEconomy-final/target/NovaEconomy-1.0.0.jar
+          path: project/NovaEconomy/target/NovaEconomy-1.1.0.jar
           if-no-files-found: error
       - name: Upload source
         uses: actions/upload-artifact@v4
         with:
           name: NovaEconomy-source
-          path: project/NovaEconomy-final
+          path: project/NovaEconomy
