@@ -21,12 +21,10 @@ jobs:
       - name: Restore source bundle
         run: |
           sed 's/archarhw/charhw/' source.part00 > source.part00.fixed
-          wc -c source.part00.fixed source.part01 source.part02a source.part02b source.part03
-          sha256sum source.part00.fixed source.part01 source.part02a source.part02b source.part03
-          cat source.part00.fixed source.part01 source.part02a source.part02b source.part03 > source.b64
-          sha256sum source.b64
+          cat source.part00.fixed source.part01 source.part02a source.part02b0 source.part02b1 source.part02b2 source.part02b3 source.part02b4 source.part03 > source.b64
+          test "$(sha256sum source.b64 | cut -d' ' -f1)" = "b9bb7778f184b9e96a11a13005f0cbec0110fc518b7734fce26b15ba33c2c412"
           base64 --decode source.b64 > NovaEconomy-source.tar.gz
-          sha256sum NovaEconomy-source.tar.gz
+          test "$(sha256sum NovaEconomy-source.tar.gz | cut -d' ' -f1)" = "b732fb3ac1bc87a86665163f2fecc1bf941e7e74d0314269c768638942fa99e4"
           mkdir project
           tar -xzf NovaEconomy-source.tar.gz -C project
       - name: Build and test
