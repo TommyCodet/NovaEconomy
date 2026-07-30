@@ -1,0 +1,1 @@
+Build request for the completed NovaEconomy Java 25 Maven project.
