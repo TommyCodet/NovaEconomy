@@ -20,13 +20,16 @@ jobs:
           cache: maven
       - name: Restore source bundle
         run: |
-          wc -c source.part00 source.part01 source.part02 source.part03
-          sha256sum source.part00 source.part01 source.part02 source.part03
-          cat source.part00 source.part01 source.part02 source.part03 > source.b64
-          wc -c source.b64
-          sha256sum source.b64
-          base64 --decode --ignore-garbage source.b64 > NovaEconomy-source.tar.gz
-          sha256sum NovaEconomy-source.tar.gz
+          sed 's/archarhw/charhw/' source.part00 > source.part00.fixed
+          test "$(sha256sum source.part00.fixed | cut -d' ' -f1)" = "bfcdf3e0a8b8d3699287312dd979871c5b1729e7ba0109db56fcfb4c572a53ca"
+          test "$(sha256sum source.part01 | cut -d' ' -f1)" = "3e2671e4246ae2d387f2ca632bd4f4d34b686de60f02ccc33a0791740c28c0a2"
+          test "$(sha256sum source.part02a | cut -d' ' -f1)" = "ade17b53043320610c8bbd0462ebcbf408e3493ecaa6513e1857e52725a2d57f"
+          test "$(sha256sum source.part02b | cut -d' ' -f1)" = "9cf1a8627ab57319275238cbede37e78afa24c0a9474326392c1d125abed09f5"
+          test "$(sha256sum source.part03 | cut -d' ' -f1)" = "b60d75122d6f27b5086cc28b6c662afc1c02eb079ee94b18bb6a3affacba0391"
+          cat source.part00.fixed source.part01 source.part02a source.part02b source.part03 > source.b64
+          test "$(sha256sum source.b64 | cut -d' ' -f1)" = "b9bb7778f184b9e96a11a13005f0cbec0110fc518b7734fce26b15ba33c2c412"
+          base64 --decode source.b64 > NovaEconomy-source.tar.gz
+          test "$(sha256sum NovaEconomy-source.tar.gz | cut -d' ' -f1)" = "b732fb3ac1bc87a86665163f2fecc1bf941e7e74d0314269c768638942fa99e4"
           mkdir project
           tar -xzf NovaEconomy-source.tar.gz -C project
       - name: Build and test
