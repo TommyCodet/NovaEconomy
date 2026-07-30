@@ -20,7 +20,13 @@ jobs:
           cache: maven
       - name: Restore source bundle
         run: |
-          cat source.part00 source.part01 source.part02 source.part03 | base64 -d > NovaEconomy-source.tar.gz
+          wc -c source.part00 source.part01 source.part02 source.part03
+          sha256sum source.part00 source.part01 source.part02 source.part03
+          cat source.part00 source.part01 source.part02 source.part03 > source.b64
+          wc -c source.b64
+          sha256sum source.b64
+          base64 --decode --ignore-garbage source.b64 > NovaEconomy-source.tar.gz
+          sha256sum NovaEconomy-source.tar.gz
           mkdir project
           tar -xzf NovaEconomy-source.tar.gz -C project
       - name: Build and test
