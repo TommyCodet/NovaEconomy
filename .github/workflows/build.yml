@@ -1,0 +1,39 @@
+name: Build NovaEconomy
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - name: Restore source bundle
+        run: |
+          base64 -d NovaEconomy-source.tar.gz.b64 > NovaEconomy-source.tar.gz
+          mkdir project
+          tar -xzf NovaEconomy-source.tar.gz -C project
+      - name: Build and test
+        working-directory: project/NovaEconomy-final
+        run: mvn --batch-mode clean package
+      - name: Upload plugin JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: NovaEconomy-jar
+          path: project/NovaEconomy-final/target/NovaEconomy-1.0.0.jar
+          if-no-files-found: error
+      - name: Upload source
+        uses: actions/upload-artifact@v4
+        with:
+          name: NovaEconomy-source
+          path: project/NovaEconomy-final
