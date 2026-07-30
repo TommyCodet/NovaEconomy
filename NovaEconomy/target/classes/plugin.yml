@@ -1,0 +1,59 @@
+name: NovaEconomy
+version: '1.0.0'
+main: de.txmmy.novaeconomy.NovaEconomyPlugin
+description: Eigenständiges Economy- und Auftragssystem mit SQLite
+api-version: '26.2'
+author: Txmmy
+load: POSTWORLD
+
+commands:
+  order:
+    description: Erstellt, durchsucht, sammelt oder storniert Aufträge.
+    usage: /order <block> <anzahl> <preis-pro-stück> | /order search [block] | /order collect | /order cancel <id>
+    aliases: [auftrag]
+    permission: novaeconomy.order.use
+  money:
+    description: Verwaltet das eigenständige NovaEconomy-Konto.
+    usage: /money [balance] | /money pay <spieler> <betrag> | /money admin <set|add|take> <spieler> <betrag>
+    aliases: [balance, bal, geld]
+    permission: novaeconomy.money.use
+
+permissions:
+  novaeconomy.order.use:
+    description: Zugriff auf den Befehl /order.
+    default: true
+    children:
+      novaeconomy.order.create: true
+      novaeconomy.order.search: true
+      novaeconomy.order.collect: true
+      novaeconomy.order.cancel: true
+  novaeconomy.order.create:
+    description: Darf neue Aufträge erstellen.
+    default: true
+  novaeconomy.order.search:
+    description: Darf Aufträge durchsuchen und beliefern.
+    default: true
+  novaeconomy.order.collect:
+    description: Darf gelieferte Items abholen.
+    default: true
+  novaeconomy.order.cancel:
+    description: Darf eigene Aufträge abbrechen.
+    default: true
+  novaeconomy.money.use:
+    description: Zugriff auf den Befehl /money.
+    default: true
+    children:
+      novaeconomy.money.balance: true
+      novaeconomy.money.pay: true
+  novaeconomy.money.balance:
+    description: Darf den eigenen Kontostand ansehen.
+    default: true
+  novaeconomy.money.balance.others:
+    description: Darf fremde Kontostände ansehen.
+    default: op
+  novaeconomy.money.pay:
+    description: Darf Geld an andere Spieler überweisen.
+    default: true
+  novaeconomy.money.admin:
+    description: Darf Kontostände administrativ ändern.
+    default: op

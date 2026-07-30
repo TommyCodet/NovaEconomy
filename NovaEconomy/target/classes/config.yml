@@ -1,0 +1,19 @@
+# NovaEconomy ist vollständig eigenständig und registriert keinen Vault-Service.
+
+economy:
+  # Startguthaben eines Kontos bei der ersten Verwendung, in kleinsten Einheiten intern gespeichert.
+  starting-balance: 1000.00
+  currency-symbol: "€"
+  locale: "de-DE"
+
+orders:
+  max-amount-per-order: 10000000
+  max-active-orders-per-player: 25
+  # Beim normalen Linksklick wird höchstens diese Menge geliefert.
+  normal-click-delivery-limit: 64
+  # Bei Shift-Klick wird alles Mögliche geliefert.
+  gui-page-size: 45
+
+storage:
+  sqlite-file: "novaeconomy.db"
+  busy-timeout-ms: 5000
