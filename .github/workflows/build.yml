@@ -20,20 +20,24 @@ jobs:
           cache: maven
       - name: Restore source bundle
         run: |
-          base64 -d NovaEconomy-source.tar.gz.b64 > NovaEconomy-source.tar.gz
+          sed 's/archarhw/charhw/' source.part00 > source.part00.fixed
+          cat source.part00.fixed source.part01 source.part02a source.part02b0 source.part02b1 source.part02b2 source.part02b3 source.part02b4 source.part03 > source.b64
+          test "$(sha256sum source.b64 | cut -d' ' -f1)" = "b9bb7778f184b9e96a11a13005f0cbec0110fc518b7734fce26b15ba33c2c412"
+          base64 --decode source.b64 > NovaEconomy-source.tar.gz
+          test "$(sha256sum NovaEconomy-source.tar.gz | cut -d' ' -f1)" = "b732fb3ac1bc87a86665163f2fecc1bf941e7e74d0314269c768638942fa99e4"
           mkdir project
           tar -xzf NovaEconomy-source.tar.gz -C project
       - name: Build and test
-        working-directory: project/NovaEconomy-final
+        working-directory: project/NovaEconomy
         run: mvn --batch-mode clean package
       - name: Upload plugin JAR
         uses: actions/upload-artifact@v4
         with:
           name: NovaEconomy-jar
-          path: project/NovaEconomy-final/target/NovaEconomy-1.0.0.jar
+          path: project/NovaEconomy/target/NovaEconomy-1.1.0.jar
           if-no-files-found: error
       - name: Upload source
         uses: actions/upload-artifact@v4
         with:
           name: NovaEconomy-source
-          path: project/NovaEconomy-final
+          path: project/NovaEconomy
